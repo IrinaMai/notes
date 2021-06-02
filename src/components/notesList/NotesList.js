@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import { getAllNotes, filteredList, getIsLoading } from '../../redux/selectors'
 import { getNotesFromDB, deletNoteFromDB, chngNoteinBD } from '../../redux/operations'
-import { filterClear, filterHndl } from '../../redux/actions'
+import { filterClear, filterHndl } from '../../redux/actions';
+import { Input, Button,  List, Switch } from 'antd';
 
+
+const { Search } = Input;
 
 const NoteList = () => {
 
@@ -23,45 +26,50 @@ const NoteList = () => {
     }, [corrList < 1])
  
     const hndlDelete = (e) => {
-        dispatch(deletNoteFromDB(e.target.dataset.id))
+        dispatch(deletNoteFromDB(e.currentTarget.dataset.id))
     };
 
-    const hndlChng = (e) => {
-        dispatch(chngNoteinBD(e.target.dataset.id))
-
-        
-    }
+    const hndlChng = (isDone, e) => {
+         dispatch(chngNoteinBD(e.currentTarget.dataset.id, isDone))
+       }
     const hdlFilter = (e) => {
+         dispatch(filterHndl(e));
+    }
+
+    const hdlFilterEnter = (e) => {
+         dispatch(filterHndl(e.target.value));
+    }
+    const hndlOnChng = (e) => {
         dispatch(filterHndl(e.target.value));
     }
 
 
     return (
         <>
-            {isLoading && (
-        <Loader
-          type="TailSpin"
-          color="#6699FF"
-          height={30}
-          width={30}
-        //   className={loader}
-        />
-            )}
-            
+              
             {corrList.length > 0 && 
-            <label>
-                Find note
-                 <input name="filter"  onChange={hdlFilter} />
-            </label>}
-            <ul>
-                {corrList.length > 0 && corrList.map(({id, title, text}) => (
-                    <li key={id}>{title}, {text}
-                        <button type="button" data-id={id} onClick={hndlChng} >Done</button>
-                        <button type="button" data-id={id} onClick={hndlDelete}>Delete</button>
-                    </li>
-                    
-                ))}
-            </ul>
+                <Search 
+                placeholder="input search subject" 
+                allowClear onChange={hndlOnChng} 
+                onSearch={hdlFilter} 
+                onPressEnter={hndlOnChng} 
+                enterButton className="searchInput" />
+            }
+        <List
+    itemLayout="horizontal"
+    dataSource={corrList}
+    renderItem={item => (
+      <List.Item>
+        <List.Item.Meta className={item.isDone && "doneItem"}
+          title={item.title}
+          description={item.text}
+        />
+      
+        <Switch checked={item.isDone? true : false}  checkedChildren="Done" unCheckedChildren="Wait" data-id={item.id} onChange={hndlChng} />
+        <Button type="primary" danger data-id={item.id} onClick={hndlDelete} className="deleteBtn">Delete</Button>
+      </List.Item>
+    )}
+  />,
 
         </>
     )

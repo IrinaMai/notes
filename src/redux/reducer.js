@@ -5,7 +5,6 @@ const initialState = {
     notesList: [],
     filter: "",
     error: "",
-    isLoading: false
 }
 
 export const notesReducer = createReducer(
@@ -18,12 +17,12 @@ export const notesReducer = createReducer(
             ...state, notesList: [...action.payload], error: ""
         }),
         [filterHndl]: (state, action) => ({...state, filter: action.payload}),
-        [filterClear]: (state, action) => ({ ...state, filter: ' ' }),
+        [filterClear]: (state, action) => ({ ...state, filter: '' }),
         [deleteNotesSucceess]: (state, action) => ({
             ...state, notesList: [...state.notesList.filter(item => item.id !== action.payload)], error: ""
         }),
         [chngNoteSuccess]: (state, action) => ({
-            ...state, notesList: [...state.notesList.map(item => item.id !== action.payload ? item : ({...item, isDone: true }))], error: ""
+            ...state, notesList: [...state.notesList.map(item => item.id !== action.payload ? item : ({...item, isDone: !item.isDone }))], error: ""
         }),
         [setError]: (state, action) => ({
             ...state, error: action.payload

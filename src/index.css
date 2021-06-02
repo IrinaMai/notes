@@ -5,6 +5,23 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+}
+
+#root {
+  margin: 50px
+}
+.searchInput {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.deleteBtn {
+  margin-left: 5px;
+}
+
+.doneItem {
+  text-decoration: line-through;
+
 }
 
 code {

@@ -5,18 +5,15 @@ const BASE_URL = "https://todo-list-97e36-default-rtdb.europe-west1.firebasedata
 
 
 const addNotesToDB = note => dispatch => {
-    dispatch(loading());
     axios
         .post(`${BASE_URL}Notes.json`, note)
         .then(response => {
             dispatch(addNotesSuccess({ ...note, id: response.data.name }));
         })
         .catch(error => dispatch(setError('ooops samthing going wrong')))
-    .finally(dispatch(loading()))
 };
 
 const getNotesFromDB = () => dispatch => {
-    dispatch(loading());
     axios
         .get(`${BASE_URL}Notes.json`)
         .then(response => {
@@ -29,32 +26,24 @@ const getNotesFromDB = () => dispatch => {
         
         })
         .catch(error => dispatch(setError('No one contact')))
-        .finally(dispatch(loading()))
 };
 
 const deletNoteFromDB = id => dispatch => {
-     dispatch(loading());
     axios
         .delete(`${BASE_URL}Notes/${id}.json`)
         .then(() => {
             dispatch(deleteNotesSucceess(id));
         })
         .catch(error => dispatch(setError('ooops samthing going wrong')))
-        .finally(dispatch(loading()))
-
 }
 
-const chngNoteinBD = id => dispatch => {
-    dispatch(loading());
+const chngNoteinBD = (id, isDone )=> dispatch => {
     axios
-        .patch(`${BASE_URL}Notes/${id}.json`, {isDone: true})
+        .patch(`${BASE_URL}Notes/${id}.json`, {isDone})
         .then(() => {
            dispatch(chngNoteSuccess(id))
         })
         .catch(error => dispatch(setError('ooops samthing going wrong')))
-        .finally(dispatch(loading()))
-
-
 }
 
 export { addNotesToDB, getNotesFromDB, deletNoteFromDB, chngNoteinBD }
