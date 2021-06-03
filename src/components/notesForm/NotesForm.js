@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { addNotesToDB } from '../../redux/operations';
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button } from 'antd';
 import {getError} from '../../redux/selectors'
 
-
+const { TextArea } = Input;
 
 const NotesForm =() => {
     const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const NotesForm =() => {
                         },
                     ]}
                     >
-                    <Input name="text"  placeholer="Text of notes" />
+                    <TextArea name="text"  placeholer="Text of notes" className="formText" />
                     </Form.Item>
 
             <Button type="primary" htmlType="submit"  >Add Note</Button>
